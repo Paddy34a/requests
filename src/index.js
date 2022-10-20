@@ -27,14 +27,64 @@ const createWindow = () => {
           click: () => { require("child_process").exec(`start "" "${path.join(app.getPath("userData"), "config")}"`); }
         },
         {
-          label: "Quit", 
+          label: "Quit Application", 
           role: "close"
+        }
+      ]
+    }, 
+    {
+      label: "Edit", 
+      submenu: [
+        {
+          label: "Undo", 
+          role: "undo"
+        }, 
+        {
+          label: "Redo", 
+          role: "redo"
+        }, 
+        {
+          label: "Copy", 
+          role: "copy"
+        }, 
+        {
+          label: "Paste", 
+          role: "paste"
+        }, 
+        {
+          label: "Cut", 
+          role: "cut"
+        }
+      ]
+    },
+    {
+      label: "View", 
+      submenu: [
+        {
+          label: "Zoom In", 
+          role: "zoomIn"
+        }, 
+        {
+          label: "Zoom Out", 
+          role: "zoomOut"
+        }, 
+        {
+          label: "Reset Zoom", 
+          role: "resetZoom"
         }
       ]
     }, 
     {
       label: "Developer", 
       submenu: [
+        {
+          label: "Reload", 
+          role: "reload"
+        },
+        {
+          label: "Force Reload", 
+          role: "forceReload"
+        },
         {
           label: "Toggle Developer Tools", 
           role: "toggleDevTools", 
@@ -64,7 +114,6 @@ const createWindow = () => {
     console.error("[requests] an unknown error occured whilst trying to fetch directories."); 
   }
 
-  //mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', () => {

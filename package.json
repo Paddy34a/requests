@@ -2,7 +2,7 @@
   "name": "requests",
   "productName": "requests",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "A utility application to test API's",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -13,8 +13,7 @@
   },
   "keywords": [],
   "author": {
-    "name": "Paddy34a",
-    "email": "luca.rottmann92@gmail.com"
+    "name": "Paddy34a"
   },
   "license": "MIT",
   "config": {

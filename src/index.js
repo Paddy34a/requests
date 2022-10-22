@@ -94,24 +94,49 @@ const createWindow = () => {
   ])); 
 
   const appPath = app.getPath("userData"); 
-  try {
 
+  try {
+    console.log("[requests] config initializer > starting scan...")
     const configDir = path.join(appPath, "config"); 
 
     if(fs.existsSync(configDir)) {
-
-      console.log("[requests] found config directory"); 
-
+      console.log("[requests] config initializer > found config directory"); 
+      for(const file of fs.readdirSync(configDir, { withFileTypes: true })) {
+        if(file.name === "config.json") {
+          console.log("[requests] config initializer > found config.json file"); 
+          console.log("[requests] config initializer > scan complete.")
+          return; 
+        }
+      }
+      console.log("[requests] config initializer > couldn't find config.json file, initializing new file..."); 
+      const configFilePath = path.join(configDir, "config.json"); 
+      const jsonPayload = JSON.stringify(
+        {}, 
+        null, // these 2 params make the json pretty-printed
+        2     // in order for much higher legibility
+      ); 
+      fs.writeFileSync(configFilePath, jsonPayload, "utf8"); 
+      console.log("[requests] config initializer > successfully created empty config.json file");
+      console.log("[requests] config initializer > scan complete."); 
     } else {
-
-      console.log("[requests] could not find config directory, initializing new config directory..."); 
+      console.log("[requests] config initializer > couldn't find config directory, initializing new config directory..."); 
       fs.mkdirSync(configDir); 
-      console.log("[requests] successfully created dir"); 
-
+      console.log("[requests] config initializer > successfully created config directory"); 
+      console.log("[requests] config initializer > initializing new config.json file..."); 
+      const configFilePath = path.join(configDir, "config.json"); 
+      const jsonPayload = JSON.stringify(
+        {}, 
+        null, // these 2 params make the json pretty-printed
+        2     // in order for much higher legibility
+      ); 
+      fs.writeFileSync(configFilePath, jsonPayload, "utf8"); 
+      console.log("[requests] config initializer > successfully created empty config.json file");
+      console.log("[requests] config initializer > scan complete."); 
     }
     
   } catch (e) {
-    console.error("[requests] an unknown error occured whilst trying to fetch directories."); 
+    console.error("[requests] config initializer > an unknown error occured whilst trying to fetch directories."); 
+    console.error(e);
   }
 
 };

@@ -9,7 +9,22 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "build-installer": "electron-builder"
+  },
+  "build": {
+    "appId": "requests", 
+    "win": {
+      "target": ["nsis"], 
+      "icon": "src/images/favicon.ico"
+    }, 
+    "nsis": {
+      "installerIcon": "src/images/favicon.ico", 
+      "uninstallerIcon": "src/images/favicon.ico", 
+      "uninstallDisplayName": "requests", 
+      "license": "license.md",
+      "oneClick": false, 
+      "allowToChangeInstallationDirectory": false
+    }
   },
   "keywords": [],
   "author": {
@@ -53,6 +68,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.67",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.67",
     "@electron-forge/maker-zip": "^6.0.0-beta.67",
-    "electron": "21.2.0"
+    "electron": "21.2.0",
+    "electron-builder": "^23.6.0"
   }
 }

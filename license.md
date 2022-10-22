@@ -1,2 +1,2 @@
 Thank you for using requests! 
-If you encounter any issues, make sure to report them.
+This is a utility application for sending all different kinds of requests, for example in order to test APIs or similar.

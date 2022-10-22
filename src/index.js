@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 const fs = require("fs"); 
 
@@ -6,15 +6,22 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+let mainWindow; 
+
 const createWindow = () => {
-  const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+  mainWindow = new BrowserWindow({
+    width: 1500,
+    height: 900,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
+      contextIsolation: false,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
+
+  mainWindow.on("closed", () => {
+    app.quit(); 
+  }) 
 
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.setIcon(path.join(__dirname, "images/main_icon.png"));  
@@ -111,7 +118,9 @@ const createWindow = () => {
       console.log("[requests] config initializer > couldn't find config.json file, initializing new file..."); 
       const configFilePath = path.join(configDir, "config.json"); 
       const jsonPayload = JSON.stringify(
-        {}, 
+        {
+          firstLaunch: true
+        }, 
         null, // these 2 params make the json pretty-printed
         2     // in order for much higher legibility
       ); 
@@ -125,7 +134,9 @@ const createWindow = () => {
       console.log("[requests] config initializer > initializing new config.json file..."); 
       const configFilePath = path.join(configDir, "config.json"); 
       const jsonPayload = JSON.stringify(
-        {}, 
+        {
+          firstLaunch: true
+        }, 
         null, // these 2 params make the json pretty-printed
         2     // in order for much higher legibility
       ); 
@@ -156,3 +167,51 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// --- ipc data transfer --- 
+
+ipcMain.on("gettingStarted", (event, payload) => {
+
+  const gettingStartedWindow = new BrowserWindow({
+    width: 900, 
+    height: 800, 
+    resizable: false,
+    webPreferences: {
+      devTools: false
+    } 
+  }); 
+
+  gettingStartedWindow.loadFile(path.join(__dirname, "gettingStarted.html")); 
+  gettingStartedWindow.setIcon(path.join(__dirname, "images/main_icon.png")); 
+  gettingStartedWindow.setMenu(null); 
+
+}); 
+
+ipcMain.on("firstLaunchCheck", async (event, payload) => {
+  const jsonResponse = await getConfigData(); 
+  const res = jsonResponse.firstLaunch; 
+  if(res !== undefined && res !== null) {
+    await mainWindow.webContents.send("firstLaunchCheck", res);  
+    if(res === true) {
+      jsonResponse.firstLaunch = false; 
+      const json = JSON.stringify(jsonResponse, null, 2); 
+      const configFile = path.join(path.join(app.getPath("userData"), "config"), "config.json"); 
+      if(fs.existsSync(configFile)){
+        fs.writeFileSync(configFile, json, "utf8"); 
+      }
+    }
+  } else {
+    mainWindow.webContents.send("firstLaunchCheck", true);  
+  }
+})
+
+// helper functions
+
+const getConfigData = () => {
+  const configFile = path.join(path.join(app.getPath("userData"), "config"), "config.json"); 
+  if(fs.existsSync(configFile)) {
+    return JSON.parse(fs.readFileSync(configFile)); 
+  } else {
+    return {};   
+  }
+}; 

@@ -156,3 +156,54 @@ select {
   transform-origin: right; 
   cursor: default; 
 }
+
+.content {
+  margin: 1em; 
+}
+
+.dropdown-btn {
+  background-color: #777;
+  color: white;
+  padding: 1em; 
+  width: 15em; 
+  font-size: 16px;
+  border: none;
+  transition: all .5s ease;
+}
+
+.dropdown-btn:hover, .dropdown-btn:focus {
+  background-color: #555;
+  cursor: pointer; 
+  border-radius: 10px;
+}
+
+.method-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #999;
+  width: 15em; 
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.show-dropdown-contents {
+  display: block;
+}

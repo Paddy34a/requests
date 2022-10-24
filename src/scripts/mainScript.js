@@ -527,3 +527,41 @@ ipcRenderer.on("firstLaunchCheck", (event, payload) => {
         });
     }
 })
+
+
+// method dropdown functionality 
+
+const methodDropdownButton = document.querySelector(".dropdown-btn"); 
+
+methodDropdownButton.addEventListener("click", (e) => {
+    document.querySelector(".dropdown-content").classList.toggle("show-dropdown-contents"); 
+}); 
+
+window.addEventListener("click", (e) => {   
+
+    if(!e.target.matches(".dropdown-btn")) {
+        const dropdowns = document.querySelectorAll(".dropdown-content"); 
+        dropdowns.forEach((element) => {
+            if(element.classList.contains("show-dropdown-contents")) {
+                element.classList.remove("show-dropdown-contents"); 
+            }
+        }); 
+    }
+
+    if(e.target.matches(".dropdown-content a")) {
+        const target = e.target; 
+        const textContent = target.textContent; 
+        if(target instanceof HTMLAnchorElement) {
+            methods.forEach((entry) => {
+                if(textContent === entry) {
+                    console.log("found matching entry at position " + methods.indexOf(entry)); 
+
+                    // continue here making it so that it swaps out the current textcontent of the main button element (which opens the dropdown) and also updates the array of anchor tags which shall only display the leftover possibilities (therefore not including the one that's currently already selected) 
+                }
+            })
+        }
+    }
+    
+}); 
+
+const methods = ["GET", "POST", "PUT", "DELETE", "HEAD"]; 

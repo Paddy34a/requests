@@ -509,6 +509,8 @@ const { ipcRenderer } = require("electron");
 const fs = require("fs");
 const path = require("path"); 
 const axios = require("axios"); 
+const { resourceUsage } = require("process");
+const { doesNotReject } = require("assert");
 
 
 // inject first launch msg if needed
@@ -531,37 +533,64 @@ ipcRenderer.on("firstLaunchCheck", (event, payload) => {
 
 // method dropdown functionality 
 
-const methodDropdownButton = document.querySelector(".dropdown-btn"); 
+let methods = ["GET", "POST", "PUT", "DELETE", "HEAD"]; 
 
-methodDropdownButton.addEventListener("click", (e) => {
-    document.querySelector(".dropdown-content").classList.toggle("show-dropdown-contents"); 
-}); 
-
-window.addEventListener("click", (e) => {   
-
-    if(!e.target.matches(".dropdown-btn")) {
-        const dropdowns = document.querySelectorAll(".dropdown-content"); 
-        dropdowns.forEach((element) => {
-            if(element.classList.contains("show-dropdown-contents")) {
-                element.classList.remove("show-dropdown-contents"); 
-            }
-        }); 
-    }
-
-    if(e.target.matches(".dropdown-content a")) {
-        const target = e.target; 
-        const textContent = target.textContent; 
-        if(target instanceof HTMLAnchorElement) {
-            methods.forEach((entry) => {
-                if(textContent === entry) {
-                    console.log("found matching entry at position " + methods.indexOf(entry)); 
-
-                    // continue here making it so that it swaps out the current textcontent of the main button element (which opens the dropdown) and also updates the array of anchor tags which shall only display the leftover possibilities (therefore not including the one that's currently already selected) 
-                }
-            })
-        }
+document.addEventListener("click", (e) => {
+    const isDropdownBtn = e.target.matches("[data-dropdown-btn]"); 
+    if(!isDropdownBtn && e.target.closest("[data-dropdown]") !== null) {
+        return; 
     }
     
-}); 
+    let currentDropdown; 
+    
+    if(isDropdownBtn) {
+        currentDropdown = e.target.closest("[data-dropdown]"); 
+        currentDropdown.classList.toggle("active"); 
+    }
 
-const methods = ["GET", "POST", "PUT", "DELETE", "HEAD"]; 
+    document.querySelectorAll("[data-dropdown].active").forEach((element) => {
+        if(element === currentDropdown) {
+            return; 
+        }
+        element.classList.remove("active");
+    });
+})
+
+document.addEventListener("DOMContentLoaded", (e) => {
+    methods.forEach((method) => {
+        const li = document.createElement("li"); 
+        li.textContent = method; 
+        document.querySelector(".dropdown-content ul").appendChild(li); 
+    }); 
+})
+
+const updateLiFromMethodsArray = () => {
+    const ul = document.querySelector(".dropdown-content ul"); 
+    ul.innerHTML = ""; 
+    methods.forEach((method) => {
+        const li = document.createElement("li"); 
+        li.textContent = method; 
+        document.querySelector(".dropdown-content ul").appendChild(li); 
+    }); 
+}
+
+document.querySelector(".dropdown-content").addEventListener("click", (e) => {
+    const target = e.target; 
+    if(target instanceof HTMLLIElement) {
+        const text = target.textContent; 
+        const btn = document.querySelector(".dropdown-btn"); 
+        if(btn.textContent === "Select Method...") {
+            btn.textContent = text; 
+            methods = methods.filter(m => m !== text); 
+            updateLiFromMethodsArray(); 
+        } else {
+            methods.push(btn.textContent);
+            btn.textContent = text; 
+            methods = methods.filter(m => m !== text); 
+            updateLiFromMethodsArray(); 
+        }
+    }
+})
+
+// continue by adding the currently selected request method to the config.json file
+// also insert request method from config.json file into the dropdown open button (only if firstLaunch isn't true ofc)

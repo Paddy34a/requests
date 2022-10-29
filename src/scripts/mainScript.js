@@ -505,19 +505,18 @@ gradient.initGradient("#gradient-canvas");
 
 // imports
 
-const { ipcRenderer } = require("electron"); 
-const fs = require("fs");
-const path = require("path"); 
-const axios = require("axios"); 
-const { resourceUsage } = require("process");
-const { doesNotReject } = require("assert");
+const { ipcRenderer } = require("electron");
 
+let isFirstLaunch; 
 
 // inject first launch msg if needed
 
 ipcRenderer.send("firstLaunchCheck"); 
 ipcRenderer.on("firstLaunchCheck", (event, payload) => {
-    if(payload === false) { // this is just so i dont have to edit the file every time i want to rs my app
+    if(payload === true) { 
+
+        isFirstLaunch = true; 
+
         const header = document.querySelector(".header"); 
         const p = document.createElement("p");
         p.textContent = "Click here to get started"; 
@@ -527,6 +526,8 @@ ipcRenderer.on("firstLaunchCheck", (event, payload) => {
         p.addEventListener("click", () => {
             ipcRenderer.send("gettingStarted"); 
         });
+    } else {
+        isFirstLaunch = false; 
     }
 })
 
@@ -594,3 +595,15 @@ document.querySelector(".dropdown-content").addEventListener("click", (e) => {
 
 // continue by adding the currently selected request method to the config.json file
 // also insert request method from config.json file into the dropdown open button (only if firstLaunch isn't true ofc)
+
+// animating toggle switch 
+
+const toggle = document.querySelector(".toggle-box"); 
+
+toggle.addEventListener("click", (e) => {
+    document.querySelector(".toggle-box-circle").classList.toggle("active");  
+}); 
+
+toggle.addEventListener("auxclick", (e) => {
+    document.querySelector(".toggle-box-circle").classList.toggle("active"); 
+}); 

@@ -21,11 +21,17 @@ const createWindow = () => {
 
   mainWindow.on("closed", () => {
     app.quit(); 
-  }) 
+  }); 
 
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.setIcon(path.join(__dirname, "images/main_icon.png"));  
   mainWindow.setMenu(Menu.buildFromTemplate([
+    {
+      label: "[Open Settings]", 
+      click: () => {
+        createSettingsWindow(); 
+      }
+    },
     {
       label: "File", 
       submenu: [
@@ -67,6 +73,26 @@ const createWindow = () => {
     {
       label: "View", 
       submenu: [
+        {
+          label: "Fullscreen", 
+          click: () => {
+            const isFullscreen = mainWindow.fullScreen; 
+            mainWindow.fullScreen = (isFullscreen ? false : true); 
+          }, 
+        },
+        {
+          label: "Maximize", 
+          click: () => {
+            const isMaximized = mainWindow.isMaximized(); 
+            isMaximized ? mainWindow.restore() : mainWindow.maximize(); 
+          }
+        },
+        {
+          label: "Minimize", 
+          click: () => {
+            mainWindow.minimize(); 
+          }
+        },
         {
           label: "Zoom In", 
           role: "zoomIn"
@@ -167,6 +193,24 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// --- create settings window ---
+
+const createSettingsWindow = () => {
+  const window = new BrowserWindow({
+    width: 1300, 
+    height: 800, 
+    webPreferences: {
+      nodeIntegration: true, 
+      contextIsolation: false,
+      devTools: true, 
+    }
+  })
+
+  window.loadFile(path.join(__dirname, "settings.html")); 
+  window.setIcon(path.join(__dirname, "images/main_icon.png")); 
+  window.setMenu(null); 
+}; 
 
 // --- ipc data transfer --- 
 

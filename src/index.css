@@ -158,6 +158,7 @@ select {
 
 .dropdown {
   position: relative; 
+  margin-bottom: .5em;
 }
 
 .dropdown-btn {
@@ -212,4 +213,30 @@ select {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  z-index: 1;
+}
+
+.toggle-box {
+  background-color: #999; 
+  width: 100px; 
+  height: 40px; 
+  border-radius: 40px; /* amount of border radius doesn't actually matter, as long as it's above half of the height in this case */
+  position: relative;
+}
+
+.toggle-box-circle {
+  width: 30px; 
+  height: 30px; 
+  background-color: #ff0000;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px; 
+  left: 5px; 
+
+  transition: all .4s ease;
+}
+
+.toggle-box-circle.active {
+  left: 65px; 
+  background-color: #00ff00;
 }

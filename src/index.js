@@ -119,6 +119,12 @@ const createWindow = () => {
           role: "forceReload"
         },
         {
+          label: "Getting Started", 
+          click: () => {
+            createGettingStartedWindow(); 
+          }
+        },
+        {
           label: "Toggle Developer Tools", 
           role: "toggleDevTools", 
         },
@@ -215,20 +221,7 @@ const createSettingsWindow = () => {
 // --- ipc data transfer --- 
 
 ipcMain.on("gettingStarted", (event, payload) => {
-
-  const gettingStartedWindow = new BrowserWindow({
-    width: 900, 
-    height: 800, 
-    resizable: false,
-    webPreferences: {
-      devTools: false
-    } 
-  }); 
-
-  gettingStartedWindow.loadFile(path.join(__dirname, "gettingStarted.html")); 
-  gettingStartedWindow.setIcon(path.join(__dirname, "images/main_icon.png")); 
-  gettingStartedWindow.setMenu(null); 
-
+  createGettingStartedWindow();  
 }); 
 
 ipcMain.on("firstLaunchCheck", async (event, payload) => {
@@ -259,3 +252,18 @@ const getConfigData = () => {
     return {};   
   }
 }; 
+
+const createGettingStartedWindow = () => {
+  const gettingStartedWindow = new BrowserWindow({
+    width: 900, 
+    height: 800, 
+    resizable: false,
+    webPreferences: {
+      devTools: false
+    } 
+  }); 
+
+  gettingStartedWindow.loadFile(path.join(__dirname, "gettingStarted.html")); 
+  gettingStartedWindow.setIcon(path.join(__dirname, "images/main_icon.png")); 
+  gettingStartedWindow.setMenu(null); 
+}

@@ -222,6 +222,7 @@ select {
   height: 40px; 
   border-radius: 40px; /* amount of border radius doesn't actually matter, as long as it's above half of the height in this case */
   position: relative;
+  margin-bottom: .5em;
 }
 
 .toggle-box-circle {

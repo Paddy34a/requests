@@ -598,12 +598,17 @@ document.querySelector(".dropdown-content").addEventListener("click", (e) => {
 
 // animating toggle switch 
 
-const toggle = document.querySelector(".toggle-box"); 
+const toggles = document.querySelectorAll(".toggle-box"); 
 
-toggle.addEventListener("click", (e) => {
-    document.querySelector(".toggle-box-circle").classList.toggle("active");  
-}); 
+toggles.forEach((toggle) => {
 
-toggle.addEventListener("auxclick", (e) => {
-    document.querySelector(".toggle-box-circle").classList.toggle("active"); 
+    const addActiveClass = () => {
+        toggle.querySelector(".toggle-box-circle").classList.toggle("active"); 
+    }; 
+
+    toggle.addEventListener("mousedown", (e) => {
+        if(e.button === 0 || e.button === 2) {
+            addActiveClass(); 
+        }
+    }); 
 }); 

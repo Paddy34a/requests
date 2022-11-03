@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.myip.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;">
     <title>requests</title>
     <link rel="stylesheet" href="index.css" />
+    <script src="scripts/mainScript.js" defer></script>
   </head>
   <body>
-    <script src="scripts/mainScript.js" defer></script>
 
     <div class="container">
 
@@ -29,6 +29,9 @@
           </div>
         </div>
         <div class="toggle">
+          <div class="toggle-box"><div class="toggle-box-circle"></div></div>
+          <div class="toggle-box"><div class="toggle-box-circle"></div></div>
+          <div class="toggle-box"><div class="toggle-box-circle"></div></div>
           <div class="toggle-box"><div class="toggle-box-circle"></div></div>
         </div>
       </div>
